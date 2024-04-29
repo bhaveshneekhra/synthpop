@@ -7,7 +7,7 @@ The following steps to be followed to generate the synthetic population.
     Recommended: Install a virtual environment:
 
         python3 -m venv venv_for_synthpop
-	    source venv_for_synthpop/bin/activat
+	    source venv_for_synthpop/bin/activate
 
  Use the following command to install the synthpopp library.
     
