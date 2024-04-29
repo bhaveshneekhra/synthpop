@@ -14,7 +14,7 @@ The following steps to be followed to generate the synthetic population.
         pip3 install git+https://github.com/bhaveshneekhra/synthpoppp/
 
 
-2. The following command is used to generate the synthpop for the city (the source files should be provided- see point 2 for the description):
+2. The following command is used to generate the synthpop for the city (the source files should be provided- see the next point for the description):
 
         python3 generate.py  
 
