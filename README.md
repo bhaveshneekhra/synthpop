@@ -25,7 +25,7 @@ The following steps to be followed to generate the synthetic population.
         --debug: Prints detailed messages if True, default: False
         --overwrite: Overwrites the earlier synthetic population (default=False)
 
-3. The source files (description for each line is inline) should be provided in the following directory structure:
+3. The source files (description for each file is inline) should be provided in the following directory structure:
 
         district_level_source_files
             |
