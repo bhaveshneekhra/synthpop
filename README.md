@@ -1,13 +1,13 @@
 # synthpop_bharatsim
 
-* Install the synthpoppp library from github
+First, install the synthpoppp library from github
 
     Recommended: Install a virtual environment:
 
             python3 -m venv venv_for_synthpop
-	        source venv_for_synthpop/bin/activat
+	    source venv_for_synthpop/bin/activat
 
-* Use the following command to install the synthpopp library.
+ Use the following command to install the synthpopp library.
     
         pip3 install git+https://github.com/bhaveshneekhra/synthpoppp/
 
