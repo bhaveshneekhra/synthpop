@@ -1,4 +1,4 @@
-# synthpop_bharatsim
+# synthpop
 
 The following steps to be followed to generate the synthetic population.
 
