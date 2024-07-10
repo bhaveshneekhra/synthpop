@@ -32,8 +32,8 @@ arguments = parser.parse_args()
 
 mean_wkplace_size = int(arguments.mean_wkplace_size)
 n_proc = int(arguments.n_proc)
-DEBUG = arguments.debug=="True" or arguments.debug=="true"
-overwrite = arguments.overwrite=="True" or arguments.overwrite=="true"
+DEBUG = arguments.debug=="True" or arguments.debug=="true" or arguments.debug=="TRUE" 
+overwrite = arguments.overwrite=="True" or arguments.overwrite=="true" or arguments.overwrite=="TRUE"
 subset = arguments.subset.split(",")
 subsetting = subset[0]!=""
 

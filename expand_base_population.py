@@ -115,7 +115,7 @@ def add_features(base_pop_df, state_name, district_name, district_source_files_p
     base_pop_df['WorkPlace_AdminUnit'] = joined['name']
 
     points_gdf = gpd.GeoDataFrame(base_pop_df, geometry=gpd.points_from_xy(base_pop_df.School_Lon, base_pop_df.School_Lat))
-    joined = gpd.sjoin(points_gdf, gdf, how='inner', op='within')
+    joined = gpd.sjoin(points_gdf, gdf, how='inner', predicate='within')
 
     base_pop_df['School_AdminUnit'] = joined['name']
 
