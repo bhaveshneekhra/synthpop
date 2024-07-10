@@ -1,4 +1,4 @@
-# synthpop
+# Generating synthetic population for districts in India
 
 The following steps to be followed to generate the synthetic population.
 
