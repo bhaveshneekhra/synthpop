@@ -6,7 +6,7 @@ The following steps to be followed to generate the synthetic population.
 
         git clone https://github.com/bhaveshneekhra/synthpop.git
 
-2. First, install the synthpoppp library from github
+2. Install the synthpoppp library from github
 
     Recommended: Install a virtual environment:
 
