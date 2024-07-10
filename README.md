@@ -2,7 +2,11 @@
 
 The following steps to be followed to generate the synthetic population.
 
-1. First, install the synthpoppp library from github
+1. Clone this repository by using the following command:
+
+        git clone https://github.com/bhaveshneekhra/synthpop.git
+
+2. First, install the synthpoppp library from github
 
     Recommended: Install a virtual environment:
 
@@ -14,7 +18,7 @@ The following steps to be followed to generate the synthetic population.
         pip3 install git+https://github.com/bhaveshneekhra/synthpoppp/
 
 
-2. The following command is used to generate the synthpop for the city (the source files should be provided- see the next point for the description):
+3. The following command is used to generate the synthpop for the city (the source files should be provided- see the next point for the description):
 
         python3 generate.py  
 
@@ -25,7 +29,7 @@ The following steps to be followed to generate the synthetic population.
         --debug: Prints detailed messages if True, default: False
         --overwrite: Overwrites the earlier synthetic population (default=False)
 
-3. The source files (description for each file is inline) should be provided in the following directory structure:
+4. The source files (description for each file is inline) should be provided in the following directory structure:
 
         district_level_source_files
             |
@@ -46,6 +50,6 @@ The following steps to be followed to generate the synthetic population.
             ---population density file for the country 
                     GPW projection for population density for India. (Source: https://data.worldpop.org/GIS/Population_Density/Global_2000_2020_1km/2020/IND/ind_pd_2020_1km_ASCII_XYZ.zip)
 
-4. The base population is saved as synthetic.csv inside the directory structure:
+5. The base population is saved as synthetic.csv inside the directory structure:
             
             district_level_source_files --> <STATE NAME> --> <City/District Name>
