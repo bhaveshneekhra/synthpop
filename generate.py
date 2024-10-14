@@ -132,7 +132,7 @@ def generate_and_save_data(ihds_state_id, state_name, district_name, district_so
 		synthetic_population = generate_base_synthpop(ihds_state_id, district_source_files_path)
 
 		#  Expand base population
-		add_features(synthetic_population, state_name, district_name, district_source_files_path)
+		synthetic_population = add_features(synthetic_population, state_name, district_name, district_source_files_path)
 		#  Asign workplace
 		
 		print("\n\n****************************************************************")
@@ -173,16 +173,16 @@ for source_file_state_name in source_file_state_names:
 				if not os.path.exists(synthetic_population_output_filename):
 					args_to_pass.append((ihds_state_id, source_file_state_name, district_name, district_source_files_path)) 
 				else: 
-					print("\n\n****************************************************************")
-					print("\n\nSkipping generating synthetic population as it already exists for %s." % district_name)
+					# print("\n\n****************************************************************")
+					print("\n\nSkipping generating synthetic population as it already exists for %s.\n\n" % district_name)
 					print("\n\n****************************************************************")
 			else:
 				args_to_pass.append((ihds_state_id, source_file_state_name, district_name, district_source_files_path))
 
 args_to_pass = sorted(args_to_pass, key=lambda x : x[1])
 
-if DEBUG and len(args_to_pass)!=0:
-	print("Synthetic population to be generated: %s" % args_to_pass)
+if len(args_to_pass)!=0:
+	print("\n\n\nSynthetic population to be generated: %s\n\n\n" % args_to_pass)
 
 if __name__ == '__main__':
 	multiprocess_pool = Pool(n_proc)
@@ -200,5 +200,5 @@ if __name__ == '__main__':
 		for failed_district in failed_districts:
 			print(failed_districts)
 		print("****************************************************************\n\n")
-	if(DEBUG):
+	if True:
 		print("Started At :", start, "\nEnded At :", end, "\nWall Time :", end-start)

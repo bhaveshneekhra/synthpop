@@ -3,6 +3,7 @@ import numpy as np
 import geopandas as gpd
 import os
 
+import traceback
 
 def add_features(base_pop_df, state_name, district_name, district_source_files_path, agentid_offset=521000000000):
     # agentid_offset: To guarantee unique AgentIDs in a nationwide synthetic population, we add an offset to all generated AgentIDs.   
@@ -42,7 +43,7 @@ def add_features(base_pop_df, state_name, district_name, district_source_files_p
     #         20-24	    0.3
     #         25-29	    0.2
     #         30-34	    0.1
-    #         35-40	    0.0
+    #         35-40	    0.1
     #         41-59	    0.9
     #         60-99	    1.0
 
@@ -73,6 +74,9 @@ def add_features(base_pop_df, state_name, district_name, district_source_files_p
     base_pop_df['SchoolID'] = base_pop_df['SchoolID'].fillna(0)
     base_pop_df[['WorkPlaceID']] = base_pop_df[['WorkPlaceID']].astype(pd.Int64Dtype())
     base_pop_df[['SchoolID']] = base_pop_df[['SchoolID']].astype(pd.Int64Dtype())
+    columns_to_round = ['H_Lat', 'H_Lon', 'AdminUnit_Lat', 'AdminUnit_Lon', 'W_Lat', 'W_Lon', 'School_Lat', 'School_Lon', 'PublicPlace_Lat', 'PublicPlace_Lon']
+    base_pop_df[columns_to_round] = base_pop_df[columns_to_round].round(5)
+
 
     # If WorkPlaceID=0, and SchoolID != 0, then assign JobLabel: Student
 
@@ -105,23 +109,51 @@ def add_features(base_pop_df, state_name, district_name, district_source_files_p
     base_pop_df['UsesPublicTransport'] = np.where(base_pop_df['JobLabel'].isin(UsesPrivateTransport), False, True)
 
     # Add ward names to Schools and Workplaces
-
+    
     district_geojson_fname = os.path.join(district_source_files_path, "admin_units.geojson")
     gdf = gpd.read_file(district_geojson_fname)
 
-    points_gdf = gpd.GeoDataFrame(base_pop_df, geometry=gpd.points_from_xy(base_pop_df.W_Lon, base_pop_df.W_Lat))
-    joined = gpd.sjoin(points_gdf, gdf, how='inner', op='within')
+    wkplace_points_gdf = gpd.GeoDataFrame(base_pop_df, geometry=gpd.points_from_xy(base_pop_df.W_Lon, base_pop_df.W_Lat))
+    wkplace_points_gdf.crs = "epsg:4326"
+    wkplace_points_gdf.to_crs(4326)
 
-    base_pop_df['WorkPlace_AdminUnit'] = joined['name']
+    wkplace_joined = gpd.sjoin(wkplace_points_gdf, gdf, how='inner', predicate='within')  # Change op to predicate 
+    wkplace_joined.reset_index(inplace=True)
 
-    points_gdf = gpd.GeoDataFrame(base_pop_df, geometry=gpd.points_from_xy(base_pop_df.School_Lon, base_pop_df.School_Lat))
-    joined = gpd.sjoin(points_gdf, gdf, how='inner', predicate='within')
+    ward_assigned = True # For some reason, ward assignment fails for workplaces and schools. When this happens, exclude those columns from the dataframe
 
-    base_pop_df['School_AdminUnit'] = joined['name']
+    try:
+        base_pop_df['WorkPlace_AdminUnit'] = wkplace_joined['name']
+
+    except Exception as e:
+        ward_assigned = False
+        print("*****Duplicate index in workplaces?*****")
+        print(wkplace_joined[wkplace_joined.index.duplicated()])
+        print(f"Unable to assign wardnames to workplaces | STATE_ID: {state_name} | DISTRICT: {district_name} | ErrorMessage: {repr(e)}")
+        print(traceback.format_exc())
+
+    school_points_gdf = gpd.GeoDataFrame(base_pop_df, geometry=gpd.points_from_xy(base_pop_df.School_Lon, base_pop_df.School_Lat))
+    school_points_gdf.crs = "epsg:4326"
+    school_points_gdf.to_crs(4326)
+
+    school_joined = gpd.sjoin(school_points_gdf, gdf, how='inner', predicate='within')
+    school_points_gdf.reset_index(inplace=True)
+
+    try:
+        base_pop_df['School_AdminUnit'] = school_joined['name']
+
+    except Exception as e:
+        ward_assigned = False
+        print("*****Duplicate index in schools?*****")
+        print(school_joined[school_joined.index.duplicated()])
+        print(f"Unable to assign wardnames to schools | STATE_ID: {state_name} | DISTRICT: {district_name} | ErrorMessage: {repr(e)}")
+        print(traceback.format_exc())
+    
 
     # Save the df into the specified format
 
-    base_pop_df = base_pop_df[['AgentID', 'SexLabel', 'Age', 'Religion', 'Caste', 
+    if ward_assigned:
+        base_pop_df = base_pop_df[['AgentID', 'SexLabel', 'Age', 'Religion', 'Caste', 
     'StateLabel', 'District',
     'JobLabel', 'EssentialWorker',
     'AdminUnit_Name', 'AdminUnit_Lat', 'AdminUnit_Lon', 
@@ -129,6 +161,17 @@ def add_features(base_pop_df, state_name, district_name, district_source_files_p
     'AdherenceToIntervention', 'UsesPublicTransport',       
     'WorkPlaceID', 'W_Lat', 'W_Lon', 'WorkPlace_AdminUnit',
     'SchoolID', 'School_Lat', 'School_Lon', 'School_AdminUnit',
+    'PublicPlaceID', 'PublicPlace_Lat', 'PublicPlace_Lon'     
+            ]]
+    else:
+        base_pop_df = base_pop_df[['AgentID', 'SexLabel', 'Age', 'Religion', 'Caste', 
+    'StateLabel', 'District',
+    'JobLabel', 'EssentialWorker',
+    'AdminUnit_Name', 'AdminUnit_Lat', 'AdminUnit_Lon', 
+    'HHID', 'H_Lat', 'H_Lon',
+    'AdherenceToIntervention', 'UsesPublicTransport',       
+    'WorkPlaceID', 'W_Lat', 'W_Lon',
+    'SchoolID', 'School_Lat', 'School_Lon', 
     'PublicPlaceID', 'PublicPlace_Lat', 'PublicPlace_Lon'     
             ]]
 

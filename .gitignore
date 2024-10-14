@@ -1,1 +1,12 @@
 .DS_Store
+synthetic.csv
+test.ipynb
+height_weight.ipynb
+synthpop_verification.ipynb
+__pycache__/
+nation_level_source_files/*.tsv
+nation_level_source_files/*.csv
+district_level_source_files/gujarat/
+district_level_source_files/maharashtra/pune/
+district_level_source_files/maharashtra/Pune_Projected_2021/
+*.html
