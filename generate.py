@@ -95,7 +95,6 @@ def generate_base_synthpop(ihds_state_id, district_source_files_path):
 		print(synthetic_individuals)
 		
 
-
 	hlat_hlong_age_object = HLatHlongAgeAddition(admin_units_geojson_filename, admin_units_population_filename, population_density_filename)
 	base_synthetic_population = hlat_hlong_age_object.perform_transforms(synthetic_individuals, synthetic_households)
 
@@ -132,14 +131,16 @@ def generate_and_save_data(ihds_state_id, state_name, district_name, district_so
 		synthetic_population = generate_base_synthpop(ihds_state_id, district_source_files_path)
 
 		#  Expand base population
+		# Update code to automatically create agentid_offset: To guarantee unique AgentIDs in a nationwide synthetic population, we add an offset to all generated AgentIDs.
+		# Use distid from person_marg.csv to do this
+
 		synthetic_population = add_features(synthetic_population, state_name, district_name, district_source_files_path)
-		#  Asign workplace
-		
+
+		synthetic_population.to_csv(synthetic_population_output_filename, index=False)
+
 		print("\n\n****************************************************************")
 		print("\n\nThe final synthetic population for %s is saved in %s" % (district_name, synthetic_population_output_filename))
 		print("\n\n****************************************************************")
-
-		synthetic_population.to_csv(synthetic_population_output_filename, index=False)
 
 		del(synthetic_population)
 

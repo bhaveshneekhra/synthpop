@@ -1,6 +1,6 @@
-import pandas as pd
+import pandas as pd             #type:ignore
 import numpy as np
-import geopandas as gpd
+import geopandas as gpd         #type:ignore
 import os
 
 import traceback
