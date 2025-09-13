@@ -6,7 +6,11 @@ synthpop_verification.ipynb
 __pycache__/
 nation_level_source_files/*.tsv
 nation_level_source_files/*.csv
-district_level_source_files/gujarat/
-district_level_source_files/maharashtra/pune/
-district_level_source_files/maharashtra/Pune_Projected_2021/
+
+district_level_source_files/
+!district_level_source_files/maharashtra/pune/
+!district_level_source_files/maharashtra/pune_10k/
+venv_for_synthpop/
+
 *.html
+old_README.md

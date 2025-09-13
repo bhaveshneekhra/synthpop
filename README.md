@@ -1,55 +1,111 @@
-# Generating synthetic population for districts in India
+# 🏙️ Synthetic Population Generator for Indian Districts
 
-The following steps to be followed to generate the synthetic population.
+This project allows you to generate **synthetic populations** for cities and districts in India. Using Census marginals, IHDS-II survey data, and geographic boundaries, it creates realistic populations suitable for modeling, simulation, or demographic analysis.  
 
-1. Clone this repository by using the following command:
+This synthetic population generator builds on our previous research:
 
-        git clone https://github.com/bhaveshneekhra/synthpop.git
+- **Bhavesh Neekhra et al. (2023)** – *Synthpop++: A Hybrid Framework for Generating A Country-scale Synthetic Population*. [arXiv:2304.12284](https://arxiv.org/abs/2304.12284)
 
-2. Install the synthpoppp library from github
+This paper introduces methods for creating realistic, high-fidelity synthetic populations using survey and census data, which form the foundation of this tool.
 
-    Recommended: Install a virtual environment:
+---
 
-        python3 -m venv venv_for_synthpop
-	    source venv_for_synthpop/bin/activate
+## ✨ Features
+- 🏘️ Generates district-level synthetic populations.
+- 👨‍👩‍👧‍👦 Leverages household and individual survey data for realism.
+- 🌍 Uses geospatial boundaries to assign populations to administrative units.
+- ⚡ Supports multi-processing for faster generation.
 
- Use the following command to install the synthpopp library.
-    
-        pip3 install git+https://github.com/bhaveshneekhra/synthpoppp/
+---
 
+## 🚀 Quick Start
 
-3. The following command is used to generate the synthpop for the city (the source files should be provided- see the next point for the description):
+### 1️⃣ Clone the repository
+```bash
+💻 git clone https://github.com/bhaveshneekhra/synthpop.git
+cd synthpop
+```
+### 2️⃣ Set up a virtual environment (recommended)
+```bash
+python3 -m venv venv_for_synthpop
+source venv_for_synthpop/bin/activate
+```
+### 3️⃣ Install dependencies
+```bash
+🛠️  pip -r requirements.txt 
+```
 
-        python3 generate.py  
+⚠️ Note: Make sure to unzip all files in nation_level_source_files/ before running. You should have the following directory structure. 
 
-    The OPTIONAL arguments are defined as follows:
-
-        --n_proc: Number of worker processes in the Pool to leverage multiple processors on a given machine (default=1)
-        --subset: Whether to subset for the district/city in the source file (default=False)
-        --debug: Prints detailed messages if True, default: False
-        --overwrite: Overwrites the earlier synthetic population (default=False)
-
-4. The source files (description for each file is inline) should be provided in the following directory structure:
-
-        district_level_source_files
+📁 Directory Structure
+        
+        district_level_source_files/
+        |
+        |--- <STATE NAME>/
             |
-            ---<STATE NAME> (Name of the state for which the synthetic population is to be generated)
-                    |
-                    ---<City/District Name> (Name of the district/city for which the synthetic population is to be generated
-                    |
-                    ---admin_unit_wise_pop.csv  (This file contains administrative units under the city/district, its longitude and latitude and population)
-                    ---admin_units.geojson (This file contains the geogprahic features for the city/district with its administrative units)
-                    ---household_marg.csv (This file has the household sizes and the number of household of that size in the city/district. Curated from Census data)
-                    ---person_marg.csv (This file contains the total population, distribution acorss sexes, age groups, religion and caste of the city/district. Curated from Census data)
-                    
-        nation_level_source_files (these are compressed files to save space, uncompress them before running the code)
-            |
-            ---survey data files for the state (There are two files from IHDS-II survey (https://www.icpsr.umich.edu/web/DSDR/studies/36151/summary). 
-                (1) 36151-0001-Data.tsv: Survey of Individuals)
-                (2) 36151-0002-Data.tsv: Survey of Households)
-            ---population density file for the country 
-                    GPW projection for population density for India. (Source: https://data.worldpop.org/GIS/Population_Density/Global_2000_2020_1km/2020/IND/ind_pd_2020_1km_ASCII_XYZ.zip)
+            |--- <CITY_OR_DISTRICT_NAME>/
+                    |--- admin_unit_wise_pop.csv   # Admin units with population, lat, long
+                    |--- admin_units.geojson       # Geo boundaries
+                    |--- household_marg.csv        # Household size distribution
+                    |--- person_marg.csv           # Population by sex, age, religion, caste
 
-5. The base population is saved as synthetic.csv inside the directory structure:
-            
-            district_level_source_files --> <STATE NAME> --> <City/District Name>
+        nation_level_source_files/
+        |
+        |--- 36151-0001-Data.tsv       # IHDS-II survey of individuals
+        |--- 36151-0002-Data.tsv       # IHDS-II survey of households
+        |--- ind_pd_2020_1km_ASCII_XYZ.csv  # Population density map for India
+
+### 4️⃣ Running the Generator
+
+The main script is generate.py. Run it with:
+```bash
+python3 generate.py
+```
+
+    ⚙️ Optional arguments
+        •	--n_proc: Number of processes for parallel computation (default: 1)
+        •	--subset: Only generate for the target city/district (default: False)
+        •	--debug: Print detailed logs (default: False)
+        •	--overwrite: Overwrite existing synthetic population (default: False)
+
+
+💾 Output
+
+The generated synthetic population is saved as:
+```bash
+district_level_source_files/<STATE NAME>/<CITY_OR_DISTRICT_NAME>/synthetic.csv
+```
+
+Each row represents an individual with demographic attributes and assigned household.
+
+    📚 Data Sources
+        •	📝 IHDS-II Survey (2011–12)
+        •	🏛️ Census of India (2011)
+        •	🌐 GPW Population Density (2020)
+
+
+🔄 Data Flow Diagram
+
+    nation_level_source_files/       district_level_source_files/
+    -------------------------------- ------------------------------
+    | 36151-0001-Data.tsv  |        | admin_unit_wise_pop.csv       |
+    | 36151-0002-Data.tsv  |        | admin_units.geojson           |
+    | ind_pd_2020_1km_ASCII_XYZ.zip | household_marg.csv            |
+                                    | person_marg.csv               |
+    -------------------------------- ------------------------------
+
+            Survey & Census Data
+                        │
+                        ▼
+            Population Assignment Engine
+                        │
+                        ▼
+            Household & Individual Synthesis
+                        │
+                        ▼
+    district_level_source_files/<STATE>/<CITY>/synthetic.csv
+
+
+⚖️ License
+
+MIT License. See LICENSE for details.

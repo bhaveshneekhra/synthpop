@@ -26,14 +26,14 @@ parser.add_argument('--mean_wkplace_size', default=100)
 parser.add_argument('--n_proc', default=1)
 parser.add_argument('--debug', default=False)
 parser.add_argument('--subset', default="")
-parser.add_argument('--overwrite', default=True)
+parser.add_argument('--overwrite', default=False)
 
 arguments = parser.parse_args()
 
 mean_wkplace_size = int(arguments.mean_wkplace_size)
 n_proc = int(arguments.n_proc)
-DEBUG = arguments.debug=="True" or arguments.debug=="true" or arguments.debug=="TRUE" 
-overwrite = arguments.overwrite=="True" or arguments.overwrite=="true" or arguments.overwrite=="TRUE"
+DEBUG = arguments.debug=="True" or arguments.debug=="true" or arguments.debug=="TRUE" or arguments.debug=="1" 
+overwrite = arguments.overwrite=="True" or arguments.overwrite=="true" or arguments.overwrite=="TRUE" or arguments.overwrite=="1"
 subset = arguments.subset.split(",")
 subsetting = subset[0]!=""
 
