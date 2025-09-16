@@ -1,4 +1,4 @@
 fiona==1.9.6
 shapely==2.0.4
-synthpop @ git+https://github.com/bhaveshneekhra/UDST_synthpop/@87b0f8bf4b5923c93738818f275d92df73772233
-synthpoppp @ git+https://github.com/bhaveshneekhra/synthpoppp/@4427e998e9dd6450f7f3ca938921c44621e42b6c
+synthpop @ git+https://github.com/bhaveshneekhra/UDST_synthpop/
+synthpoppp @ git+https://github.com/bhaveshneekhra/synthpoppp/

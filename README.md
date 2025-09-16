@@ -32,7 +32,7 @@ source venv_for_synthpop/bin/activate
 ```
 ### 3️⃣ Install dependencies
 ```bash
-🛠️  pip -r requirements.txt 
+🛠️  pip install -r requirements.txt 
 ```
 
 ⚠️ Note: Make sure to unzip all files in nation_level_source_files/ before running. You should have the following directory structure. 

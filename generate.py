@@ -49,8 +49,8 @@ ihds_individuals_filename = os.path.join(nation_level_source_files_dir, "36151-0
 ihds_household_filename = os.path.join(nation_level_source_files_dir, "36151-0002-Data.tsv")
 population_density_filename = os.path.join(nation_level_source_files_dir, "ind_pd_2020_1km_ASCII_XYZ.csv")
 
-ihds_individuals_data = pd.read_csv(ihds_individuals_filename, sep='\t', low_memory=False)
-ihds_households_data = pd.read_csv(ihds_household_filename, sep='\t', low_memory=False)
+ihds_individuals_data = pd.read_csv(ihds_individuals_filename, sep='\t')
+ihds_households_data = pd.read_csv(ihds_household_filename, sep='\t')
 
 india_config = json.loads(open("config.json").read())
 
